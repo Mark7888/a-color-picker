@@ -848,7 +848,8 @@ function createPicker(element, options) {
     let cbEvents = {
         change: new EventEmitter('change'),
         coloradd: new EventEmitter('coloradd'),
-        colorremove: new EventEmitter('colorremove')
+        colorremove: new EventEmitter('colorremove'),
+        mouseup: new EventEmitter('mouseup'),
     };
     let isChanged = true,
         // memoize per la proprietà all
@@ -1062,15 +1063,19 @@ function createPicker(element, options) {
             cbEvents.change.off()
             cbEvents.coloradd.off()
             cbEvents.colorremove.off()
+            cbEvents.mouseup.off()
             picker.element.remove()
             cbEvents = null
             picker = null
         }
     };
+
+    var selectedColor;
     // ogni volta che viene triggerato un evento, uso il corrispettivo EventEmitter per propagarlo a tutte le callback associate
     //  le callback vengono richiamate con il "controller" come "this"
     //  e il primo parametro è sempre il "controller" seguito da tutti i parametri dell'evento
     picker.onchange = (...args) => {
+        selectedColor = args[0];
         isChanged = true; // così le proprietà in lettura dovranno ricalcolare il loro valore
         cbEvents.change.emit([controller, ...args], controller);
     };
@@ -1080,9 +1085,17 @@ function createPicker(element, options) {
     picker.oncolorremove = (...args) => {
         cbEvents.colorremove.emit([controller, ...args], controller);
     };
+    picker.onmouseup = () => {
+        cbEvents.mouseup.emit([controller, [selectedColor]], controller);
+    };
     // TOOD: trovare un altro nome a ctrl, troppo comune
     // TODO: definirla come readonly
     picker.element.ctrl = controller;
+
+    document.addEventListener('mouseup', (event) => {
+        picker.onmouseup(event);
+    });
+
     return controller;
 }
 

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="
+https://cdn.jsdelivr.net/npm/a-color-picker@1.2.1/dist/acolorpicker.min.js
+"></script>
+    <link href="
+https://cdn.jsdelivr.net/npm/a-color-picker@1.2.1/src/acolorpicker.min.css
+" rel="stylesheet">
+
+    <style>
+        body {
+            background-color: #EFE9E7;
+        }
+
+        .picker {
+            display: inline-block;
+            box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.16), 0 0 0 1px rgba(3, 1, 1, 0.08);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="picker" acp-color="#EFE9E7" acp-show-rgb="no" acp-show-hsl="no" acp-show-hex="no">
+    </div>
+</body>
+<script>
+    AColorPicker.from('.picker')
+        .on('change', (picker, color) => {
+            document.body.style.backgroundColor = color;
+        });
+</script>
+
+</html>
