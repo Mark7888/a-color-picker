@@ -1064,6 +1064,7 @@ function createPicker(element, options) {
             cbEvents.coloradd.off()
             cbEvents.colorremove.off()
             cbEvents.mouseup.off()
+            document.removeEventListener('mouseup', picker.onmouseup);
             picker.element.remove()
             cbEvents = null
             picker = null
@@ -1092,9 +1093,7 @@ function createPicker(element, options) {
     // TODO: definirla come readonly
     picker.element.ctrl = controller;
 
-    document.addEventListener('mouseup', (event) => {
-        picker.onmouseup(event);
-    });
+    document.addEventListener('mouseup', picker.onmouseup);
 
     return controller;
 }
@@ -1120,6 +1119,10 @@ function from(selector, options) {
         pickers.forEach(picker => picker.off(eventName));
         return this;
     };
+    pickers.destroy = function () {
+        pickers.forEach(picker => picker.destroy());
+        return this;
+    }
     return pickers;
 }
 
